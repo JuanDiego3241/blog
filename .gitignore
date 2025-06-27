@@ -1,0 +1,16 @@
+/*.exe
+/*.exe~
+/*.dll
+/*.so
+/*.dylib
+/bin/
+/build/
+*.test
+*.out
+/go.sum
+/go.mod
+vendor/
+.env
+.DS_Store
+.idea/
+.vscode/
