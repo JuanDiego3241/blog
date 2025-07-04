@@ -5,9 +5,8 @@ import (
 	"log"
 
 	"github.com/JuanDiego3241/blog/config"
-	"github.com/JuanDiego3241/blog/src/controllers"
+	"github.com/JuanDiego3241/blog/router"
 	"github.com/JuanDiego3241/blog/src/models"
-	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -23,6 +22,7 @@ func main() {
 		cfg.DBHost, cfg.DBUser, cfg.DBPassword,
 		cfg.DBName, cfg.DBPort, cfg.DBSSLMode, cfg.DBTimeZone,
 	)
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Error al conectar BD: %v", err)
@@ -37,17 +37,12 @@ func main() {
 		log.Fatalf("Migración automática falló: %v", err)
 	}
 	log.Println("Migración automática exitosa")
-	r := gin.Default()
-	r.HandleMethodNotAllowed = true
 
-	r.POST("/posts", controllers.CreatePost)
-	r.GET("/posts", controllers.GetPosts)
+	r := router.SetupRouter()
 
-	r.NoRoute(func(c *gin.Context) {
-		c.JSON(404, gin.H{"error": "ruta no existe", "path": c.FullPath()})
-	})
 	addr := fmt.Sprintf(":%s", cfg.ServerPort)
-	log.Printf("🏃 Servidor escuchando en %s", addr)
+	log.Printf("Servidor escuchando en %s", addr)
+
 	if err := r.Run(addr); err != nil {
 		log.Fatalf("Error al iniciar servidor: %v", err)
 	}
