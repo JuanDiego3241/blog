@@ -43,6 +43,7 @@ func main() {
 	addr := fmt.Sprintf(":%s", cfg.ServerPort)
 	log.Printf("Servidor escuchando en %s", addr)
 
+	r.Static("/uploads", "./uploads")
 	if err := r.Run(addr); err != nil {
 		log.Fatalf("Error al iniciar servidor: %v", err)
 	}
