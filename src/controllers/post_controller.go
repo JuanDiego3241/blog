@@ -73,3 +73,19 @@ func UploadPostImage(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, post)
 }
+
+func GetMyPlaylist(c *gin.Context) {
+	playlistID := c.Param("playlist_id")
+	service, err := services.NewSpotifyService()
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Error al inicializar servicio Spotify"})
+		return
+	}
+	playlist, err := service.FetchPlaylist(c.Request.Context(), playlistID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, playlist)
+}

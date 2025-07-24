@@ -18,6 +18,7 @@ func SetupRouter() *gin.Engine {
 
 	r.POST("/posts", controllers.CreatePost)
 	r.GET("/posts", controllers.GetPosts)
+	r.GET("/spotify/playlists/:playlist_id", controllers.GetMyPlaylist)
 
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"error": "ruta no existe", "path": c.FullPath()})
